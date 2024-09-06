@@ -4,11 +4,15 @@ import kakao.com.moongserver.dto.AIBotDTO;
 import kakao.com.moongserver.model.AIBot;
 import kakao.com.moongserver.repository.AIBotMemoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.*;
 
 
@@ -45,11 +49,15 @@ public class AIBotService {
     }
 
     private Mono<String> sendAIBotDataToExternal(AIBot bot) {
+        
         return webClient.post()
-                .uri("외부 엔드포인트")        // /ai/bot
+                .uri("외부 엔드포인트 path")        // /bot/ai
                 .bodyValue(bot)
                 .retrieve()
-                .bodyToMono(String.class);
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
+                        Mono.error(new RuntimeException("5xx Server Error")))
+                .bodyToMono(String.class)
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1)));
     }
 
 }
