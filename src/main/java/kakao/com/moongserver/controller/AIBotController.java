@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.xml.transform.OutputKeys;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class AIBotController {
     private final AIBotService aiBotService;
+    private final WebClient webClient;
 
     @PostMapping
     public ResponseEntity<AIBot> createBot(@RequestBody AIBotDTO aiBotDTO) {
@@ -50,5 +52,13 @@ public class AIBotController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bots);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AIBot> updateBotPrompt(@PathVariable Long id, @RequestBody AIBotDTO aiBotDTO) {
+        AIBot bot = aiBotService.updateBotPrompt(id, aiBotDTO);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(bot);
     }
 }

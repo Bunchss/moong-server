@@ -29,12 +29,14 @@ public class AIBotMemoryRepository {
         return true;
     }
 
-    public AIBot updateBotPrompt(AIBot aiBot) {
-        if (!repository.containsKey(aiBot.getId())) {
-            throw new IllegalStateException("[BotId : " + aiBot.getId() + "] 값이 존재하지 않습니다.");
+    public AIBot updateBotPrompt(Long id, AIBot aiBot) {
+        if (!repository.containsKey(id)) {
+            throw new IllegalStateException("[BotId : " + id + "] 값이 존재하지 않습니다.");
         }
 
-        return repository.put(aiBot.getId(), aiBot);
+        aiBot.setId(id);
+        repository.put(id, aiBot);
+        return aiBot;
     }
 
     public AIBot findBotById(Long id) {

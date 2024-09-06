@@ -6,6 +6,8 @@ import kakao.com.moongserver.repository.AIBotMemoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
 
@@ -14,8 +16,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AIBotService {
     private final AIBotMemoryRepository aiBotMemoryRepository;
+    private final WebClient webClient;
 
     public AIBot createBot(AIBotDTO aiBotDTO) {
+//        sendAIBotDataToExternal(aiBotDTO.toEntity());
+
         return aiBotMemoryRepository.save(aiBotDTO.toEntity());
     }
 
@@ -31,12 +36,20 @@ public class AIBotService {
         return aiBotMemoryRepository.findAllBots();
     }
 
-    /*
-    public Boolean updateBotPrompt(AIBotDTO aiBotDTO) {
-        aiBotMemoryRepository.updateBotPrompt(aiBotDTO.toEntity());
 
-//        webClient로 AI server에 프롬프트 변경 내용 및 어떤 id를 가진 character의 prompt를 변경할 것인지
+    public AIBot updateBotPrompt(Long id, AIBotDTO aiBotDTO) {
+//        sendAIBotDataToExternal(aiBotDTO.toEntity());
+
+        return aiBotMemoryRepository.updateBotPrompt(id, aiBotDTO.toEntity());
+
     }
 
-*/
+    private Mono<String> sendAIBotDataToExternal(AIBot bot) {
+        return webClient.post()
+                .uri("외부 엔드포인트")        // /ai/bot
+                .bodyValue(bot)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
 }
