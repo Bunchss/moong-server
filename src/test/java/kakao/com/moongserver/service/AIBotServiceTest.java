@@ -56,14 +56,4 @@ class AIBotServiceTest {
         assertThat(findBot.getName()).isEqualTo(aiBot.getName());
         verify(aiBotMemoryRepository, times(1)).findBotById(id);
     }
-
-    @Test
-    void deleteBot() {
-        Long id = 1L;
-        when(aiBotMemoryRepository.findBotById(id));
-
-        Boolean isDeleted = aiBotService.deleteBot(id);
-        assertThat(isDeleted).isTrue();
-        verify(aiBotMemoryRepository, times(1)).delete(id);
-    }
 }

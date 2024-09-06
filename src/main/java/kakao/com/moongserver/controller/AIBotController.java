@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import javax.xml.transform.OutputKeys;
 import java.util.ArrayList;
 
-@Controller
+@RestController
 @RequestMapping("/bot")
 @RequiredArgsConstructor
 public class AIBotController {
