@@ -49,6 +49,7 @@ public class AIBotService {
     }
 
     private Mono<String> sendAIBotDataToExternal(AIBot bot) {
+        
         return webClient.post()
                 .uri("외부 엔드포인트 path")        // /bot/ai
                 .bodyValue(bot)
