@@ -1,12 +1,12 @@
 package kakao.com.moongserver.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AIBot {
-    private final Long id;
-    private final String name;
-    private final String prompt;
+    private Long id;
+    private String name;
+    private String prompt;
 }
