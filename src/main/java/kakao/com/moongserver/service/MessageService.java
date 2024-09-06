@@ -12,8 +12,7 @@ public class MessageService {
 
     public void convertAndSendMessage(MessageDto messageDto) {
         Long roomId = messageDto.chatRoomId();
-        String message = messageDto.message();
 
-        simpMessagingTemplate.convertAndSend("/topic/chat/room/" + roomId, message);
+        simpMessagingTemplate.convertAndSend("/topic/chat/room/" + roomId, messageDto.convertMessageTopic());
     }
 }

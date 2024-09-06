@@ -9,12 +9,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class StompConfig implements WebSocketMessageBrokerConfigurer {
+    private static final String FRONT_LOCAL_ADDRESS = "http://localhost:5173";
+    private static final String FRONT_ADDRESS = "https://d3cf4a27v2oj60.cloudfront.net/";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
-                .setAllowedOrigins("*")
-                .withSockJS();
+                .setAllowedOrigins(FRONT_ADDRESS, FRONT_LOCAL_ADDRESS);
     }
 
     @Override
