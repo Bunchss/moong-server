@@ -4,12 +4,14 @@ import kakao.com.moongserver.dto.AIBotDTO;
 import kakao.com.moongserver.model.AIBot;
 import kakao.com.moongserver.service.AIBotService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.xml.transform.OutputKeys;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/bot")
@@ -23,5 +25,30 @@ public class AIBotController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(aiBot);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteBot(@PathVariable Long id) {
+//        return value type이 맞지 않다고 에러는 뜨는데, 삭제는 잘 되네
+        Boolean result = aiBotService.deleteBot(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AIBot> findBot(@PathVariable Long id) {
+        AIBot aiBot = aiBotService.findBotById(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(aiBot);
+    }
+
+    @GetMapping
+    public ResponseEntity<ArrayList<AIBot>> findAllBots() {
+        ArrayList<AIBot> bots = aiBotService.findAllBots();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(bots);
     }
 }
