@@ -17,7 +17,9 @@ public class MessageController {
     @MessageMapping("/chat")
     public void sendMessage(MessageDto messageDto) {
         messageService.convertAndSendMessage(messageDto);
-        messageService.sendMessageToExternal(messageDto);
+        Mono<MessageDto> messageDtoMono = messageService.sendMessageToExternal(messageDto);
+
+        messageDtoMono.block();
     }
 
 
