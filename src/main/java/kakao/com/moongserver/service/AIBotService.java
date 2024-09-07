@@ -4,9 +4,7 @@ import kakao.com.moongserver.dto.AIBotDTO;
 import kakao.com.moongserver.model.AIBot;
 import kakao.com.moongserver.repository.AIBotMemoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -19,13 +17,15 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class AIBotService {
-    private final AIBotMemoryRepository aiBotMemoryRepository;
     private final WebClient webClient;
+    private final AIBotMemoryRepository aiBotMemoryRepository;
+    private final static String AI_SERVER_PATH = "query_with_prompt/";
 
     public AIBot createBot(AIBotDTO aiBotDTO) {
-//        sendAIBotDataToExternal(aiBotDTO.toEntity());
+        AIBot bot = aiBotMemoryRepository.save(aiBotDTO.toEntity());
+        sendAIBotDataToExternal(bot);
 
-        return aiBotMemoryRepository.save(aiBotDTO.toEntity());
+        return bot;
     }
 
     public Boolean deleteBot(Long deleteId) {
@@ -41,23 +41,20 @@ public class AIBotService {
     }
 
 
-    public AIBot updateBotPrompt(Long id, AIBotDTO aiBotDTO) {
-//        sendAIBotDataToExternal(aiBotDTO.toEntity());
+    public AIBot updateBotPrompt(Long chatroomId, AIBotDTO aiBotDTO) {
+        AIBot bot = aiBotMemoryRepository.updateBotPrompt(chatroomId, aiBotDTO.toEntity());
+        sendAIBotDataToExternal(bot);
 
-        return aiBotMemoryRepository.updateBotPrompt(id, aiBotDTO.toEntity());
-
+        return bot;
     }
 
-    private Mono<String> sendAIBotDataToExternal(AIBot bot) {
-        
-        return webClient.post()
-                .uri("외부 엔드포인트 path")        // /bot/ai
+    private void sendAIBotDataToExternal(AIBot bot) {
+        webClient.post()
+                .uri(AI_SERVER_PATH)        // /bot/ai
                 .bodyValue(bot)
                 .retrieve()
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
-                        Mono.error(new RuntimeException("5xx Server Error")))
-                .bodyToMono(String.class)
-                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1)));
+                        Mono.error(new RuntimeException("5xx Server Error")));
     }
 
 }

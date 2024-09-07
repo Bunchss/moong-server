@@ -6,20 +6,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
 public class MessageController {
 
     private final MessageService messageService;
-//    @MessageMapping(~~) -> client가 send를 해당 ~~로 보내면 해당 method가 처리됨.
-//    @SendTo(~~) 는 메시지를 어디로 다시 broadcast할 지 결정함. 즉, topic으로 데이터를 보냄
-//      ~~를 client가 구독하고 있으면 메시지를 수신할 수 있음.
 
     @MessageMapping("/chat")
     public void sendMessage(MessageDto messageDto) {
         messageService.convertAndSendMessage(messageDto);
-//        messageService.sendMessagetoExternal(messageDto);
+        messageService.sendMessageToExternal(messageDto);
     }
 
 

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AIBot {
-    private Long id;
+    private Long chatroomId;
     private String name;
     private String prompt;
 }

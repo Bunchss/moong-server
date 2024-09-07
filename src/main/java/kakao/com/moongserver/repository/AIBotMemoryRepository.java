@@ -14,10 +14,10 @@ public class AIBotMemoryRepository {
     private final Map<Long, AIBot> repository = new HashMap<>();
 
     public AIBot save(AIBot aiBot) {
-        aiBot.setId(botIdSequence);
+        aiBot.setChatroomId(botIdSequence);
         repository.put(botIdSequence++, aiBot);
 
-        return repository.get(aiBot.getId());
+        return repository.get(aiBot.getChatroomId());
     }
 
     public Boolean delete(Long id) {
@@ -29,14 +29,13 @@ public class AIBotMemoryRepository {
         return true;
     }
 
-    public AIBot updateBotPrompt(Long id, AIBot aiBot) {
-        if (!repository.containsKey(id)) {
-            throw new IllegalStateException("[BotId : " + id + "] 값이 존재하지 않습니다.");
+    public AIBot updateBotPrompt(Long chatroomId, AIBot aiBot) {
+        if (!repository.containsKey(chatroomId)) {
+            throw new IllegalStateException("[BotId : " + chatroomId + "] 값이 존재하지 않습니다.");
         }
 
-        aiBot.setId(id);
-        repository.put(id, aiBot);
-        return aiBot;
+        aiBot.setChatroomId(chatroomId);
+        return repository.put(chatroomId, aiBot);
     }
 
     public AIBot findBotById(Long id) {
@@ -57,11 +56,7 @@ public class AIBotMemoryRepository {
     }
 
     private void saveDefaultBots() {
-        repository.put(botIdSequence, new AIBot(botIdSequence++, "ten", "ten은 무뚝뚝하고 표현을 잘 못하는 사람이야"));
-        repository.put(botIdSequence, new AIBot(botIdSequence++, "zeo", "zeo는 밝고 긍정적인 사람이야"));
-        repository.put(botIdSequence, new AIBot(botIdSequence++, "heather", "heather는 배려가 많은 사람이야"));
-        repository.put(botIdSequence, new AIBot(botIdSequence++, "james", "james는 조용하고 착한 사람이야"));
-        repository.put(botIdSequence, new AIBot(botIdSequence++, "junho", "junho는 잘 웃고 호기심이 많은 사람이야"));
+        repository.put(botIdSequence, new AIBot(botIdSequence++, "아자뭉치", "아자뭉치는 항상 긍정적이고 힘이 넘치는 캐릭터야. 대답을 할때 항상 상대방에게 밝은 분위기를 내며 대답을 해줬으면 좋겠어."));
 
     }
 }

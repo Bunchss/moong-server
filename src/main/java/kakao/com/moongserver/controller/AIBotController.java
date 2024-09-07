@@ -19,7 +19,6 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class AIBotController {
     private final AIBotService aiBotService;
-    private final WebClient webClient;
 
     @PostMapping
     public ResponseEntity<AIBot> createBot(@RequestBody AIBotDTO aiBotDTO) {
@@ -29,18 +28,18 @@ public class AIBotController {
                 .body(aiBot);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteBot(@PathVariable Long id) {
-//        return value type이 맞지 않다고 에러는 뜨는데, 삭제는 잘 되네
-        Boolean result = aiBotService.deleteBot(id);
+    //
+    @DeleteMapping("/{chatroomId}")
+    public ResponseEntity<Boolean> deleteBot(@PathVariable Long chatroomId) {
+        Boolean result = aiBotService.deleteBot(chatroomId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(result);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AIBot> findBot(@PathVariable Long id) {
-        AIBot aiBot = aiBotService.findBotById(id);
+    @GetMapping("/{chatroomId}")
+    public ResponseEntity<AIBot> findBot(@PathVariable Long chatroomId) {
+        AIBot aiBot = aiBotService.findBotById(chatroomId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(aiBot);
@@ -54,9 +53,9 @@ public class AIBotController {
                 .body(bots);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AIBot> updateBotPrompt(@PathVariable Long id, @RequestBody AIBotDTO aiBotDTO) {
-        AIBot bot = aiBotService.updateBotPrompt(id, aiBotDTO);
+    @PutMapping("/{chatroomId}")
+    public ResponseEntity<AIBot> updateBotPrompt(@PathVariable Long chatroomId, @RequestBody AIBotDTO aiBotDTO) {
+        AIBot bot = aiBotService.updateBotPrompt(chatroomId,aiBotDTO);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bot);
