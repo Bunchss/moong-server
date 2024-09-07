@@ -37,7 +37,7 @@ class AIBotServiceTest {
 
         AIBot createdBot = aiBotService.createBot(mock);
 
-        assertThat(createdBot.getId()).isEqualTo(1L);
+        assertThat(createdBot.getChatroomId()).isEqualTo(1L);
         assertThat(createdBot.getName()).isEqualTo("ten");
         verify(aiBotMemoryRepository, times(1)).save(any(AIBot.class));
     }
@@ -52,7 +52,7 @@ class AIBotServiceTest {
 
         AIBot findBot = aiBotService.findBotById(id);
 
-        assertThat(findBot.getId()).isEqualTo(id);
+        assertThat(findBot.getChatroomId()).isEqualTo(id);
         assertThat(findBot.getName()).isEqualTo(aiBot.getName());
         verify(aiBotMemoryRepository, times(1)).findBotById(id);
     }
